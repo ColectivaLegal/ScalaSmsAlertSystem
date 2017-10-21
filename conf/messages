@@ -4,10 +4,10 @@ error_msg=We were unable to understand your message. To report immigration activ
 follow_up=ICE detained {0} people in {1} today. Please call {2} at {3} to demand their release and call for ICE to stay out of WA!
 language_selection_msg=Select your preferred language: \n \
 Text "1" for English \n \
-# Responda escribiendo "2" para recibir mensajes en español \n\
-# 한국어 수신은 "3" \n \
-# 中文短信請發"4" \n \
-# Gửi tin nhắn số "5" để yêu cầu ngôn ngữ tiếng Việt.
+Responda escribiendo "2" para recibir mensajes en español \n\
+한국어 수신은 "3" \n \
+中文短信請發"4" \n \
+Gửi tin nhắn số "5" để yêu cầu ngôn ngữ tiếng Việt.
 subscribe_help_msg=We were unable to understand your message. Text "join" to subscribe.
 unsubscribed_msg=You have been unsubscribed from receiving text message alerts. You may re-join by texting "join" to this number.
 unsupported_lang_msg=We were unable to understand your language choice.
