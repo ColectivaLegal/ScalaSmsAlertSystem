@@ -9,14 +9,41 @@ To begin with, please ensure you have the following installed on your local deve
 
 JDK8 is currently required due to some incompatibilities between SBT's ivy implementation and JDK9 
 
+## Twilio Setup
+
+You'll need a Twilio account to send and receive messages. You can
+sign up for a trial account for free.
+
+After signing up, click on "Get Started" and follow the screens to
+create a phone number. This is the number that will be used for
+subscribing to the alert system.
+
+You'll need to configure Twilio to communicate with the webhook
+endpoint in this Scala application. Go to "Manage Numbers" and click
+the number you created. On the configuration screen, scroll to the
+"Messaging" section and find the label "A Message Comes In". Make sure
+"Webhook" is selected and enter the web-accessible URL of your
+application with the following path:
+
+http://your.domain/twilio/message
+
+If you are running on a local development instance behind a
+NAT/firewall, you can use [ngrok](https://ngrok.com/) to create a
+tunnel from a web-accessible address to your machine.
+
 ## Getting Started: Running Locally
 
-Before you can launch the application locally, you need a Twilio account to send and receive messages. You will need to set environment variables which define the account security identifier, authorization token, associated phone number. After those have been defined, you can invoke sbt to start it:
+You will need to set environment variables with your Twilio account
+settings. After those have been defined, you can invoke sbt to start
+it:
 
 ```
 cd ScalaSmsAlertSystem
+# username = your Account SID
 export TWILIO_USERNAME="..."
+# password = auth token
 export TWILIO_PASSWORD="..."
+# the phone number you created
 export TWILIO_PHONE="..."
 sbt run
 ```
