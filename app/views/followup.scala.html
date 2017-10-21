@@ -1,0 +1,19 @@
+@(followupForm: Form[FollowUp])()(implicit messages: Messages, flash: Flash, request: RequestHeader)
+
+@*
+ * Call the `main` template with two arguments. The first
+ * argument is a `String` with the title of the page, the second
+ * argument is an `Html` object containing the body of the page.
+ *@
+@main("SMS Alerting System V2") {
+    <h1>Follow Up Form</h1>
+
+    @helper.form(action = routes.FollowupController.post()) {
+        @helper.CSRF.formField
+        @helper.inputText(followupForm("numberPeople"), '_label -> "Number of People Detained")
+        @helper.inputText(followupForm("city"), '_label -> "City")
+        @helper.inputText(followupForm("targetName"), '_label -> "Person to Call for Release")
+        @helper.inputText(followupForm("targetPhoneNumber"), '_label -> "Phone Number of Person to Call")
+        <button type="submit" class="btn btn-primary">Submit</button>
+    }
+}

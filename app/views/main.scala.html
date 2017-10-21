@@ -1,0 +1,60 @@
+@*
+ * This template is called from the `index` template. This template
+ * handles the rendering of the page header and body tags. It takes
+ * two arguments, a `String` for the title of the page and an `Html`
+ * object to insert into the body of the page.
+ *@
+@(title: String)(content: Html)(implicit flash: Flash)
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>@title</title>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/bootstrap.css")">
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/alert">Alert Form</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/followup">Follow Up Form</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="container">
+            @flash.get("success").map { message =>
+                <div class ="alert alert-success">
+                    @message
+                </div>
+            }
+            <div class="well">
+                @* And here's where we render the `Html` object containing
+                * the page content. *@
+                @content
+            </div>
+        </div>
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="@routes.Assets.versioned("javascripts/bootstrap.js")"></script>
+    </body>
+</html>

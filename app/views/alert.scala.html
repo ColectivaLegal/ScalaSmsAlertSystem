@@ -1,0 +1,16 @@
+@(alertForm: Form[Alert])()(implicit messages: Messages, flash: Flash, request: RequestHeader)
+
+@*
+ * Call the `main` template with two arguments. The first
+ * argument is a `String` with the title of the page, the second
+ * argument is an `Html` object containing the body of the page.
+ *@
+@main("SMS Alerting System V2") {
+    <h1>Alert Form</h1>
+
+    @helper.form(action = routes.AlertController.post()) {
+        @helper.CSRF.formField
+        @helper.textarea(alertForm("address"), '_label -> "Event Address")
+        <button type="submit" class="btn btn-primary">Submit</button>
+    }
+}
