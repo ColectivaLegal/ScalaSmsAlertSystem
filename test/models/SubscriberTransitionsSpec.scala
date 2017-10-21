@@ -19,6 +19,12 @@ class SubscriberTransitionsSpec extends FunSpec with Matchers {
         message shouldEqual "language_selection_msg"
         newSubscriber.get.state shouldEqual SubscriberTransitions.SelectingLanguage.name
       }
+
+      it ("should transition the subscriber to selecting language if join with surrounding whitespace is sent") {
+        val (message, newSubscriber) = subscriberTransitions.receiveInput(" \t\tjoin \n  \n\t\n  ")
+        message shouldEqual "language_selection_msg"
+        newSubscriber.get.state shouldEqual SubscriberTransitions.SelectingLanguage.name
+      }
     }
     describe("when a user is choosing a language") {
       val subscriber = Subscriber(1, "555-555-5555", None, SubscriberTransitions.SelectingLanguage.name);
@@ -32,6 +38,13 @@ class SubscriberTransitionsSpec extends FunSpec with Matchers {
 
       it("should transition the subscriber to completed if a language is selected") {
         val (message, newSubscriber) = subscriberTransitions.receiveInput("1")
+        message shouldEqual "confirmation_msg"
+        newSubscriber.get.state shouldEqual SubscriberTransitions.Complete.name
+        newSubscriber.get.language shouldEqual Some("eng")
+      }
+
+      it("should transition the subscriber to completed if a language with surrounding whitespace is selected") {
+        val (message, newSubscriber) = subscriberTransitions.receiveInput(" \n\n1  \t\n ")
         message shouldEqual "confirmation_msg"
         newSubscriber.get.state shouldEqual SubscriberTransitions.Complete.name
         newSubscriber.get.language shouldEqual Some("eng")
@@ -54,8 +67,20 @@ class SubscriberTransitionsSpec extends FunSpec with Matchers {
         newSubscriber.get.state shouldEqual SubscriberTransitions.SelectingLanguage.name
       }
 
+      it ("should return to the select language state if the appropriate message with surrounding whitespace is sent") {
+        val (message, newSubscriber) = subscriberTransitions.receiveInput("      \t change language   \n")
+        message shouldEqual "language_selection_msg"
+        newSubscriber.get.state shouldEqual SubscriberTransitions.SelectingLanguage.name
+      }
+
       it ("should unsubscribe the user if the appropriate message is sent") {
         val (message, newSubscriber) = subscriberTransitions.receiveInput("leave")
+        message shouldEqual "unsubscribed_msg"
+        newSubscriber.get.state shouldEqual SubscriberTransitions.Unsubscribed.name
+      }
+
+      it ("should unsubscribe the user if the appropriate message with surrounding whitespace is sent") {
+        val (message, newSubscriber) = subscriberTransitions.receiveInput("  \n  leave \t")
         message shouldEqual "unsubscribed_msg"
         newSubscriber.get.state shouldEqual SubscriberTransitions.Unsubscribed.name
       }

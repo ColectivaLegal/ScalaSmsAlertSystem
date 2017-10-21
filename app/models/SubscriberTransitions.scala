@@ -4,27 +4,28 @@ import models.SubscriberTransitions.{Complete, SelectingLanguage, SubscriptionSt
 
 class SubscriberTransitions(subscriber : Subscriber) {
   def receiveInput(input : String):(String, Option[Subscriber]) = {
+    val trimmedInput = input.trim
     val currentstate = SubscriberTransitions.withName(subscriber.state);
     currentstate match {
       case Unsubscribed =>
-        if(input.equalsIgnoreCase("join")) {
+        if(trimmedInput.equalsIgnoreCase("join")) {
           val newSubscriber = subscriber.copy(state = SelectingLanguage.name)
           return ("language_selection_msg", Some(newSubscriber))
         } else {
           return ("subscribe_help_msg", None)
         }
       case SelectingLanguage =>
-        if(input.equalsIgnoreCase("1")) {
+        if(trimmedInput.equalsIgnoreCase("1")) {
           val newSubscriber = subscriber.copy(language = Some("eng"), state=Complete.name)
           return ("confirmation_msg", Some(newSubscriber))
         } else {
           return ("unsupported_lang_msg", None)
         }
       case Complete =>
-        if (input.equalsIgnoreCase("change language")) {
+        if (trimmedInput.equalsIgnoreCase("change language")) {
           val newSubscriber = subscriber.copy(state = SelectingLanguage.name)
           return ("language_selection_msg", Some(newSubscriber))
-        } else if (input.equalsIgnoreCase("leave")) {
+        } else if (trimmedInput.equalsIgnoreCase("leave")) {
           val newSubscriber = subscriber.copy(state = Unsubscribed.name)
           return ("unsubscribed_msg", Some(newSubscriber))
         } else {
