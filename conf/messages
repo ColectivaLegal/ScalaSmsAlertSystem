@@ -1,7 +1,7 @@
 action_alert=ICE activity has been confirmed at {0}. Please take caution or show up if you are able to support.
 confirmation_msg=You are now signed up for alerts about immigration (ICE) activity in Washington. You will be notified of confirmed actions. Text "change language" to change your preferred language. Text "leave" to stop receiving messages.
 error_msg=We were unable to understand your message. To report immigration activity or to ask for help, please call 1-844-RAIDREP (1-844-724-3737).
-follow_up=ICE detained {0} people in {1} today. Please call {2} at {3} to demand their release and call for ICE to stay out of WA!
+follow_up=ICE detained {0} {1} in {2} today. Please call {3} at {4} to demand their release and call for ICE to stay out of WA!
 language_selection_msg=Select your preferred language: \n \
 Text "1" for English \n \
 Responda escribiendo "2" para recibir mensajes en español \n\

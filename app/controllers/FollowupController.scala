@@ -38,10 +38,11 @@ class FollowupController @Inject()(cc: ControllerComponents, repo: SubscriberRep
         repo.listActive().map { subscribers =>
           val messages = subscribers.map { subscriber =>
             implicit val lang: Lang = Lang.get("en").get
+            val personWord = if (followup.numberPeople == 1) "person" else "people"
             Message
               .creator(new PhoneNumber(subscriber.phone), // to
                 new PhoneNumber(sys.env("TWILIO_PHONE")), // from
-                messagesApi("follow_up", followup.numberPeople, followup.city, followup.targetName, followup.targetPhoneNumber))
+                messagesApi("follow_up", followup.numberPeople, personWord, followup.city, followup.targetName, followup.targetPhoneNumber))
               .create()
           }
           Redirect(routes.HomeController.index())
