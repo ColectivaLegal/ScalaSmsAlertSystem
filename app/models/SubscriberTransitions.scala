@@ -2,8 +2,28 @@ package models
 
 import models.SubscriberTransitions.{Complete, SelectingLanguage, SubscriptionState, Unsubscribed}
 
+sealed trait SubscriberAction
+case class AlertAction(addr: String) extends SubscriberAction
+
 class SubscriberTransitions(subscriber : Subscriber) {
-  def receiveInput(input : String):(String, Option[Subscriber]) = {
+  def action(input: String): Option[SubscriberAction] = {
+    val trimmedInput = input.trim
+    val currentstate = SubscriberTransitions.withName(subscriber.state);
+    currentstate match {
+      case Unsubscribed =>
+        None
+      case SelectingLanguage =>
+        None
+      case Complete =>
+        if (trimmedInput.length > 6 && trimmedInput.substring(0, 6).equalsIgnoreCase("report")) {
+          return Some(AlertAction(trimmedInput.substring(6).trim))
+        } else {
+          return None
+        }
+    }
+  }
+
+  def transition(input : String):(String, Option[Subscriber]) = {
     val trimmedInput = input.trim
     val currentstate = SubscriberTransitions.withName(subscriber.state);
     currentstate match {
@@ -28,6 +48,8 @@ class SubscriberTransitions(subscriber : Subscriber) {
         } else if (trimmedInput.equalsIgnoreCase("leave")) {
           val newSubscriber = subscriber.copy(state = Unsubscribed.name)
           return ("unsubscribed_msg", Some(newSubscriber))
+        } else if (trimmedInput.length > 6 && trimmedInput.substring(0, 6).equalsIgnoreCase("report")) {
+          return ("report_msg", None)
         } else {
           return ("error_msg", None)
         }
