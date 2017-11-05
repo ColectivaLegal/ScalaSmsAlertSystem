@@ -3,6 +3,8 @@ package controllers
 import javax.inject.{Inject, Singleton}
 
 import com.twilio.twiml.{Body, Message, MessagingResponse}
+import models.{Alert}
+import models.{SubscriberAction, AlertAction}
 import models.{SubscriberRepository, SubscriberTransitions}
 import play.api.data.Form
 import play.api.data.Forms._
@@ -28,7 +30,11 @@ class TwilioController @Inject()(cc: ControllerComponents, repo: SubscriberRepos
     repo.getOrCreate(twilioData.from).map { subscriber =>
       implicit val lang: Lang = Lang.get("en").get
       val subscriberTransition = new SubscriberTransitions(subscriber)
-      val (responseMessage, updatedSubscriber) = subscriberTransition.receiveInput(twilioData.body)
+      val action = subscriberTransition.action(twilioData.body)
+      if (action.isDefined) {
+        performAction(action.get)
+      }
+      val (responseMessage, updatedSubscriber) = subscriberTransition.transition(twilioData.body)
       if (updatedSubscriber.isDefined) {
         repo.update(updatedSubscriber.get)
       }
@@ -39,6 +45,16 @@ class TwilioController @Inject()(cc: ControllerComponents, repo: SubscriberRepos
         .message(message)
         .build();
       Ok(response.toXml()).as("application/xml")
+    }
+  }
+
+  def performAction(action: SubscriberAction) = {
+    action match {
+      case AlertAction(addr) =>
+        val alert = Alert(addr)
+        repo.listActive().map { subscribers =>
+          alert.sendAlert(subscribers, messagesApi)
+        }
     }
   }
 }

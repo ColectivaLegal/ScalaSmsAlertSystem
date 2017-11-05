@@ -2,12 +2,10 @@ package controllers
 
 import javax.inject.{Inject, Singleton}
 
-import com.twilio.rest.api.v2010.account.Message
-import com.twilio.`type`.PhoneNumber
 import models.SubscriberRepository
 import play.api.data.Form
 import play.api.data.Forms._
-import play.api.i18n.{Lang, MessagesApi}
+import play.api.i18n.MessagesApi
 import play.api.mvc.{AbstractController, ControllerComponents}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -33,14 +31,7 @@ class AlertController @Inject()(cc: ControllerComponents, repo: SubscriberReposi
       },
       alert => {
         repo.listActive().map { subscribers =>
-          val messages = subscribers.map { subscriber =>
-            implicit val lang: Lang = Lang.get("en").get
-            Message
-              .creator(new PhoneNumber(subscriber.phone), // to
-                new PhoneNumber(sys.env("TWILIO_PHONE")), // from
-                messagesApi("action_alert", alert.address))
-              .create()
-          }
+          val messages = alert.sendAlert(subscribers, messagesApi)
           Redirect(routes.HomeController.index())
             .flashing("success" -> ("Done! Messages sent with IDs " + messages.map(_.getSid()).mkString(",")))
         }
