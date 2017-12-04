@@ -20,6 +20,12 @@ class SubscriberTransitionsSpec extends FunSpec with Matchers {
         newSubscriber.get.state shouldEqual SubscriberTransitions.SelectingLanguage.name
       }
 
+      it ("should transition the subscriber to selecting language if a non-English join is sent") {
+        val (message, newSubscriber) = subscriberTransitions.transition("등록")
+        message shouldEqual "language_selection_msg"
+        newSubscriber.get.state shouldEqual SubscriberTransitions.SelectingLanguage.name
+      }
+
       it ("should transition the subscriber to selecting language if join with surrounding whitespace is sent") {
         val (message, newSubscriber) = subscriberTransitions.transition(" \t\tjoin \n  \n\t\n  ")
         message shouldEqual "language_selection_msg"
@@ -44,6 +50,11 @@ class SubscriberTransitionsSpec extends FunSpec with Matchers {
         newSubscriber.get.language shouldEqual Some("eng")
       }
 
+      it("should transition the subscriber to the appropriate language") {
+        val (_, newSubscriber) = subscriberTransitions.transition("3")
+        newSubscriber.get.language shouldEqual Some("kor")
+      }
+
       it("should transition the subscriber to completed if a language with surrounding whitespace is selected") {
         val (message, newSubscriber) = subscriberTransitions.transition(" \n\n1  \t\n ")
         message shouldEqual "confirmation_msg"
@@ -64,6 +75,12 @@ class SubscriberTransitionsSpec extends FunSpec with Matchers {
 
       it ("should return to the select language state if the appropriate message is sent") {
         val (message, newSubscriber) = subscriberTransitions.transition("change language")
+        message shouldEqual "language_selection_msg"
+        newSubscriber.get.state shouldEqual SubscriberTransitions.SelectingLanguage.name
+      }
+
+      it ("should return to the select language state if the appropriate non-english message is sent") {
+        val (message, newSubscriber) = subscriberTransitions.transition("改變語言")
         message shouldEqual "language_selection_msg"
         newSubscriber.get.state shouldEqual SubscriberTransitions.SelectingLanguage.name
       }

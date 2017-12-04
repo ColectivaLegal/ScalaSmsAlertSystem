@@ -1,0 +1,14 @@
+action_alert=Hoạt động di dân nhập cư đã được xác nhận tại địa điểm {0}. Xin chú ý hoặc hiện diện nếu bạn có khả năng hổ trợ.
+confirmation_msg=Bạn hiện đã đăng ký để nhận cảnh báo về hoạt động di dân nhập cư (ICE) ở bang Washington. Gửi tin nhắn “Thay đồi ngôn ngữ” để thay đổi ngôn ngữ thích hợp cho bạn. Gửi tin nhắn “Rời khỏi” để ngưng nhận các cảnh báo.
+error_msg=Chúng tôi không  hiểu được yêu cầu của bạn. Để báo cáo hoạt động về di dân nhập cư (ICE) hoặc yêu cầu sự trợ giúp, xin vui lòng gọi 1-844-RAIDREP (1-844-724-3737).
+follow_up=Ngày hôm nay Công Vụ về Di Dân -ICE- đã giam giữ {0} người trong thành phố  $city. Xin hãy gọi đến {2} qua số điện thoại {3} để yêu cầu họ thả người và cũng gọi yêu cầu Công Vụ về Di Dân nên ra khỏi bang Washington.
+language_selection_msg=Select your preferred language: \n \
+Text "1" for English \n \
+Responda escribiendo "2" para recibir mensajes en español \n\
+한국어 수신은 "3" \n \
+中文短信請發"4" \n \
+Gửi tin nhắn số "5" để yêu cầu ngôn ngữ tiếng Việt.
+subscribe_help_msg=We were unable to understand your message. Text "join" to subscribe.
+unsubscribed_msg=Bạn đã chọn rời khỏi việc tiếp nhận cảnh báo từ hệ thống gửi tin nhắn của Mạng Liên Đoàn Kết Người Nhập Cư. Bạn có thể tham gia lại bằng cách nhắn tin "Tham gia" vào số điện thoại này.
+unsupported_lang_msg=We were unable to understand your language choice.
+report_msg=Thank you for reporting ICE activity. An alert will be sent out to all subscribers.

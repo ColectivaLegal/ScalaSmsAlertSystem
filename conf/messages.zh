@@ -1,0 +1,14 @@
+action_alert=在 {0} 確認了ICE行動。請多加謹慎，或若能夠支持請到現場。
+confirmation_msg=您已註冊接收ICE在WA的行動警報短信。若要改變語言請發短信"改變語言"。若要取消警報請發短信"離開"。
+error_msg=抱歉，我們無法理解您的短信。若要報告ICE行動或請求幫助，請撥1-844-RAIDREP（1-844-724-3737）。
+follow_up=今天ICE在 {0} 扣押了 {2} 位人們。請撥 {3} 找 {4} 要求釋放，並且要求ICE離開華盛頓州！
+language_selection_msg=Select your preferred language: \n \
+Text "1" for English \n \
+Responda escribiendo "2" para recibir mensajes en español \n\
+한국어 수신은 "3" \n \
+中文短信請發"4" \n \
+Gửi tin nhắn số "5" để yêu cầu ngôn ngữ tiếng Việt.
+subscribe_help_msg=We were unable to understand your message. Text "join" to subscribe.
+unsubscribed_msg=您已離開WA移民團結網絡警報系統。若要重新加入，請發短信"加入"到此號碼。
+unsupported_lang_msg=We were unable to understand your language choice.
+report_msg=Thank you for reporting ICE activity. An alert will be sent out to all subscribers.
