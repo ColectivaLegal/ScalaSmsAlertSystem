@@ -21,6 +21,5 @@ COPY . $PROJECT_HOME/app
 WORKDIR $PROJECT_HOME/app
 EXPOSE 9000
 
-RUN sbt compile -v
-CMD ["sbt", "--version"]
-
+RUN sbt -v clean compile stage
+CMD ["./target/universal/stage/bin/smsalertsystemv2", "-Dplay.evolutions.db.default.autoApply=true", "-Dplay.http.secret.key=$PLAY_SECRET_KEY"]

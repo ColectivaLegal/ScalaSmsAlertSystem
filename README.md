@@ -45,10 +45,28 @@ export TWILIO_USERNAME="..."
 export TWILIO_PASSWORD="..."
 # the phone number you created
 export TWILIO_PHONE="..."
-sbt run
+sbt clean compile stage
+./target/universal/stage/bin/smsalertsystemv2 \
+  -Dplay.evolutions.db.default.autoApply=true \
+	-Dplay.http.secret.key=l33t_52uc3
 ```
 
 This will launch a local version of the application with in memory database. The first time you load the page you will be asked to update the database schema but then it should be functional.
+
+## Runnning Via Docker
+
+The project is deployed to AWS ECS, which runs the docker image built from the `Dockerfile` defined in this project. You
+can build and run the docker container via:
+```
+docker build .
+docker run \
+   -e "TWILIO_USERNAME=username" \
+   -e "TWILIO_PASSWORD=password" \
+   -e "TWILIO_PHONE=+10000000000" \
+   -e "PLAY_SECRET_KEY=l33t_52uc3" \
+   -p 9000:9000 2cb4c70f20cb
+wget localhost:9000
+```
 
 # Deploying to the Cloud
 
