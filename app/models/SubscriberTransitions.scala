@@ -60,26 +60,28 @@ class SubscriberTransitions(subscriber : Subscriber) {
     val currentstate = SubscriberTransitions.withName(subscriber.state);
     currentstate match {
       case Unsubscribed =>
-        if(joinMessages.exists{ x => trimmedInput.equalsIgnoreCase(x)}) {
+        if (joinMessages.exists { x => trimmedInput.equalsIgnoreCase(x) }) {
           val newSubscriber = subscriber.copy(state = SelectingLanguage.name)
           return ("language_selection_msg", Some(newSubscriber))
         } else {
           return ("subscribe_help_msg", None)
         }
       case SelectingLanguage =>
-        if(languageSelections.contains(trimmedInput)) {
-          val newSubscriber = subscriber.copy(language = languageSelections.get(trimmedInput), state=Complete.name)
+        if (languageSelections.contains(trimmedInput)) {
+          val newSubscriber = subscriber.copy(language = languageSelections.get(trimmedInput), state = Complete.name)
           return ("confirmation_msg", Some(newSubscriber))
         } else {
           return ("unsupported_lang_msg", None)
         }
       case Complete =>
-        if (changeLanguageMessages.exists{ x => trimmedInput.equalsIgnoreCase(x)}) {
+        if (changeLanguageMessages.exists { x => trimmedInput.equalsIgnoreCase(x) }) {
           val newSubscriber = subscriber.copy(state = SelectingLanguage.name)
           return ("language_selection_msg", Some(newSubscriber))
-        } else if (leaveMessages.exists{ x => trimmedInput.equalsIgnoreCase(x)}) {
+        } else if (leaveMessages.exists { x => trimmedInput.equalsIgnoreCase(x) }) {
           val newSubscriber = subscriber.copy(state = Unsubscribed.name)
           return ("unsubscribed_msg", Some(newSubscriber))
+        } else if (joinMessages.exists { x => trimmedInput.equalsIgnoreCase(x) }) {
+          return ("already_subscribed_msg", None)
         } else if (trimmedInput.length > 6 && trimmedInput.substring(0, 6).equalsIgnoreCase("report")) {
           return ("report_msg", None)
         } else {

@@ -114,6 +114,12 @@ class SubscriberTransitionsSpec extends FunSpec with Matchers {
         message shouldEqual "report_msg"
         newSubscriber shouldBe None
       }
+
+      it ("should return already subscribed if the user attempts to resubscribe") {
+        val (message, newSubscriber) = subscriberTransitions.transition("join")
+        message shouldEqual "already_subscribed_msg"
+        newSubscriber shouldBe None
+      }
     }
   }
 

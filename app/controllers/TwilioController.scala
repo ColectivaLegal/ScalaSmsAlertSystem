@@ -42,12 +42,11 @@ class TwilioController @Inject()(cc: ControllerComponents, repo: SubscriberRepos
         performAction(action.get)
       }
       val (responseMessage, updatedSubscriber) = subscriberTransition.transition(twilioData.body)
-      //TODO: Need to fix this to use the updated language of the subscriber.
       val lang : Lang = if (updatedSubscriber.isDefined) {
         repo.update(updatedSubscriber.get)
-        Lang.get(subscriberLangMap.get(updatedSubscriber.get.language.get).getOrElse("en")).get
+        Lang.get(subscriberLangMap.get(updatedSubscriber.get.language.getOrElse("eng")).get).get
       } else {
-        Lang.get(subscriberLangMap.get(subscriber.language.get).getOrElse("en")).get
+        Lang.get(subscriberLangMap.get(subscriber.language.getOrElse("eng")).get).get
       }
       val message = new Message.Builder()
         .body(new Body(messagesApi(responseMessage)(lang)))

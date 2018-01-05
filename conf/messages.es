@@ -12,3 +12,4 @@ subscribe_help_msg=We were unable to understand your message. Text "join" to sub
 unsubscribed_msg=Usted ha abandonado el sistema de alerta de la red de solidaridad de inmigrantes de WA. Usted puede inscribirse nuevamente respondiendo "suscribirse" a este número.
 unsupported_lang_msg=We were unable to understand your language choice.
 report_msg=Thank you for reporting ICE activity. An alert will be sent out to all subscribers.
+already_subscribed_msg=You are already subscribed to the WA Immigrant Solidarity Network's Text Message alert system. Text "change language" to change your preferred language. Text "leave" to stop receiving messages.

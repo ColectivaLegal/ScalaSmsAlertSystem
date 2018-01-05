@@ -12,3 +12,4 @@ subscribe_help_msg=We were unable to understand your message. Text "join" to sub
 unsubscribed_msg=Bạn đã chọn rời khỏi việc tiếp nhận cảnh báo từ hệ thống gửi tin nhắn của Mạng Liên Đoàn Kết Người Nhập Cư. Bạn có thể tham gia lại bằng cách nhắn tin "Tham gia" vào số điện thoại này.
 unsupported_lang_msg=We were unable to understand your language choice.
 report_msg=Thank you for reporting ICE activity. An alert will be sent out to all subscribers.
+already_subscribed_msg=You are already subscribed to the WA Immigrant Solidarity Network's Text Message alert system. Text "change language" to change your preferred language. Text "leave" to stop receiving messages.
