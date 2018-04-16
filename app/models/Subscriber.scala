@@ -5,6 +5,6 @@ import play.api.libs.json._
 case class Subscriber(id: Long, phone: String, language: Option[String], state: String)
 
 object Subscriber {
-  implicit val subscriberFormat = Json.format[Subscriber]
+  implicit val subscriberFormat: OFormat[Subscriber] = Json.format[Subscriber]
 
 }

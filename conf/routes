@@ -9,6 +9,8 @@ GET     /alert                      controllers.AlertController.get
 POST    /alert                      controllers.AlertController.post
 GET     /followup                   controllers.FollowupController.get
 POST    /followup                   controllers.FollowupController.post
+GET     /debug                      controllers.DebugController.get
+POST    /debug                      controllers.DebugController.post
 
 POST    /twilio/message             controllers.TwilioController.messagePost
 # Map static resources from the /public folder to the /assets URL path

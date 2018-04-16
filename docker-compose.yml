@@ -1,0 +1,40 @@
+version: "3.6"
+services:
+  sms:
+    build:
+      context: .
+    command: [
+      "./target/universal/stage/bin/smsalertsystemv2", 
+      "-Dplay.evolutions.db.default.autoApply=true",
+      "-Dplay.http.secret.key=l33t_52uc3",
+      "-Dslick.dbs.default.db.url=jdbc:mysql://mysql:3306/sms"
+    ]
+    depends_on:
+      - db
+    environment:
+      TWILIO_USERNAME: username
+      TWILIO_PASSWORD: password
+      TWILIO_PHONE: '+10000000000'
+    links:
+      - db:mysql
+    networks:
+      - service_network
+    ports:
+      - "9000:9000"
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: sms
+    networks:
+      service_network:
+        aliases:
+          - mysql
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+networks:
+  service_network:

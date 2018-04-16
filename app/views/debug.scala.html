@@ -1,0 +1,26 @@
+@(subscriberForm: Form[Subscriber], subscribers: Seq[Subscriber])()(implicit messages: Messages, flash: Flash, request: RequestHeader)
+
+@*
+ * Call the `main` template with two arguments. The first
+ * argument is a `String` with the title of the page, the second
+ * argument is an `Html` object containing the body of the page.
+ *@
+@main("SMS Alerting System V2") {
+    <h1>Debug Page</h1>
+
+    @helper.form(action = routes.DebugController.post()) {
+        @helper.CSRF.formField
+        @helper.textarea(subscriberForm("id"), '_label -> "ID (not used)")
+        @helper.textarea(subscriberForm("phone_number"), '_label -> "Phone Number")
+        @helper.textarea(subscriberForm("language"), '_label -> "Language, one of: ")
+        @helper.textarea(subscriberForm("state"), '_label -> "State, one of: ")
+        <button type="submit" class="btn btn-primary">Submit</button>
+    }
+
+  <h3>Current Subscribers</h3>
+  <ul>
+    @for(subscriber <- subscribers) {
+      <li>@subscriber.phone, @subscriber.language, @subscriber.state<li>
+    }
+  </ul>
+}

@@ -14,6 +14,7 @@ case class Alert(address: String) {
     "vie" -> "vi",
     "cmn" -> "zh"
   )
+
   def sendAlert(subscribers: Seq[Subscriber], messagesApi: MessagesApi) = {
     subscribers.map { subscriber =>
       implicit val lang: Lang = Lang.get(subscriberLangMap.get(subscriber.language.get).get).get

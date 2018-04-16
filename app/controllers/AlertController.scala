@@ -20,6 +20,7 @@ class AlertController @Inject()(cc: ControllerComponents, repo: SubscriberReposi
       "address" -> nonEmptyText
     )(models.Alert.apply)(models.Alert.unapply)
   )
+
   def get = Action { implicit request =>
     Ok(views.html.alert(alertForm))
   }
