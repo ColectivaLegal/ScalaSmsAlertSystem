@@ -39,16 +39,17 @@ class SubscriberRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(
   }
 
   def getOrCreate(phone: String): Future[Subscriber] = {
-    val action = (
-      subscribers.filter(_.phone === phone).result.headOption.flatMap {
-      case Some(subscriber) =>
-        DBIO.successful(subscriber)
-      case None =>
-        (subscribers.map(s => (s.phone, s.state))
-          returning subscribers.map(_.id)
-          into ((row, id) => Subscriber(id, row._1, None, row._2))
-          ) += (phone, "unsubscribed")
-    }).transactionally
+    val action = subscribers
+      .filter(_.phone === phone)
+      .result
+      .headOption
+      .flatMap {
+        case Some(subscriber) => DBIO.successful(subscriber)
+        case None => (subscribers.map(s => (s.phone, s.state))
+            returning subscribers.map(_.id)
+            into ((row, id) => Subscriber(id, row._1, None, row._2))
+            ) += (phone, "unsubscribed")
+      }.transactionally
     db.run(action)
   }
 

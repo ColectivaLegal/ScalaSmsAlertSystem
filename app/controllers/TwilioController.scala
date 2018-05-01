@@ -16,8 +16,10 @@ import scala.concurrent.ExecutionContext
 
 @Singleton
 class TwilioController @Inject()(cc: ControllerComponents, repo: SubscriberRepository, messagesApi: MessagesApi)
-                                (implicit ec: ExecutionContext)  extends AbstractController(cc) {
+                                (implicit ec: ExecutionContext) extends AbstractController(cc) {
+
   case class TwilioData(from: String, body: String)
+
   val twilioForm = Form(
     mapping(
       "From" -> text,
@@ -34,7 +36,8 @@ class TwilioController @Inject()(cc: ControllerComponents, repo: SubscriberRepos
   )
 
   def messagePost = Action.async { implicit request =>
-    val twilioData = twilioForm.bindFromRequest.get
+    val twilioData: TwilioData = twilioForm.bindFromRequest.get
+
     repo.getOrCreate(twilioData.from).map { subscriber =>
       val subscriberTransition = new SubscriberTransitions(subscriber)
       val action = subscriberTransition.action(twilioData.body)
