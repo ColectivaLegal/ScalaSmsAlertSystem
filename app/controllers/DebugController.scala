@@ -17,11 +17,12 @@ class DebugController @Inject()(cc: ControllerComponents, repo: SubscriberReposi
 
   val addSubscriberForm = Form(
     mapping(
-      "id" -> longNumber,
       "phone_number" -> nonEmptyText,
       "language" -> optional(text),
       "state" -> nonEmptyText
-    )(models.Subscriber.apply)(models.Subscriber.unapply)
+    )
+    ((number, lang, state) => models.Subscriber(0, number, lang, state))
+    (subscriber => Some((subscriber.phone, subscriber.language, subscriber.state)))
   )
 
   def get = Action.async { implicit request =>
@@ -39,7 +40,7 @@ class DebugController @Inject()(cc: ControllerComponents, repo: SubscriberReposi
       },
       (subscriber: Subscriber) => {
         repo
-          .getOrCreate(subscriber.phone)
+          .create(subscriber.phone, subscriber.language, subscriber.state)
           .map(realSub => {
             Redirect(routes.DebugController.get())
           })

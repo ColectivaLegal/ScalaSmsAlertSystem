@@ -6,21 +6,33 @@
  * argument is an `Html` object containing the body of the page.
  *@
 @main("SMS Alerting System V2") {
-    <h1>Debug Page</h1>
+  <h1>Debug Page</h1>
 
-    @helper.form(action = routes.DebugController.post()) {
-        @helper.CSRF.formField
-        @helper.textarea(subscriberForm("id"), '_label -> "ID (not used)")
-        @helper.textarea(subscriberForm("phone_number"), '_label -> "Phone Number")
-        @helper.textarea(subscriberForm("language"), '_label -> "Language, one of: ")
-        @helper.textarea(subscriberForm("state"), '_label -> "State, one of: ")
-        <button type="submit" class="btn btn-primary">Submit</button>
-    }
-
-  <h3>Current Subscribers</h3>
-  <ul>
-    @for(subscriber <- subscribers) {
-      <li>@subscriber.phone, @subscriber.language, @subscriber.state<li>
-    }
-  </ul>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm">
+        @helper.form(action = routes.DebugController.post()) {
+            @helper.CSRF.formField
+            @helper.textarea(subscriberForm("phone_number"), '_label -> "Phone Number")
+            @helper.textarea(
+                subscriberForm("language"),
+                '_label -> s"Language, one of: ${SubscriberTransitions.LanguageSelections.values.mkString(",")}"
+            )
+            @helper.textarea(
+                subscriberForm("state"),
+                '_label -> s"State, one of: ${SubscriberTransitions.SubscriptionStates.map(_.stateName).mkString(",")}"
+            )
+            <button type="submit" class="btn btn-primary">Submit</button>
+        }
+      </div>
+      <div class="col-sm">
+        <h3>Current Subscribers</h3>
+        <ul>
+        @for(subscriber <- subscribers) {
+          <li>@subscriber.id, @subscriber.phone, @subscriber.language, @subscriber.state</li>
+        }
+        </ul>
+      </div>
+    </div>
+  </div>
 }

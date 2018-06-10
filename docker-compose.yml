@@ -4,7 +4,7 @@ services:
     build:
       context: .
     command: [
-      "./target/universal/stage/bin/smsalertsystemv2", 
+      "./target/universal/stage/bin/smsalertsystemv2",
       "-Dplay.evolutions.db.default.autoApply=true",
       "-Dplay.http.secret.key=l33t_52uc3",
       "-Dslick.dbs.default.db.url=jdbc:mysql://mysql:3306/sms"

@@ -1,10 +1,10 @@
 package models
 
-import javax.inject.{ Inject, Singleton }
+import javax.inject.{Inject, Singleton}
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 
-import scala.concurrent.{ Future, ExecutionContext }
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class SubscriberRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
@@ -28,6 +28,13 @@ class SubscriberRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(
       returning subscribers.map(_.id)
       into ((row, id) => Subscriber(id, row._1, None, row._2))
     ) += (phone, "unsubscribed")
+  }
+
+  def create(phone: String, lang: Option[String], subscriptionState: String): Future[Subscriber] = db.run {
+    (subscribers.map(s => (s.phone, s.language, s.state))
+      returning subscribers.map(_.id)
+      into ((row, id) => Subscriber(id, row._1, row._2, row._3))
+      ) += (phone, lang, subscriptionState)
   }
 
   def list(): Future[Seq[Subscriber]] = db.run {

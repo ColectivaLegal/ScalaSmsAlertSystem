@@ -1,11 +1,8 @@
 package controllers
 
-import javax.inject.{Inject, Singleton}
-
 import com.twilio.twiml.{Body, Message, MessagingResponse}
-import models.{Alert}
-import models.{SubscriberAction, AlertAction}
-import models.{SubscriberRepository, SubscriberTransitions}
+import javax.inject.{Inject, Singleton}
+import models.{Alert, AlertAction, SubscriberRepository, SubscriberTransitions}
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.i18n.{Lang, MessagesApi}
@@ -53,21 +50,17 @@ class TwilioController @Inject()(cc: ControllerComponents, repo: SubscriberRepos
       }
       val message = new Message.Builder()
         .body(new Body(messagesApi(responseMessage)(lang)))
-        .build();
+        .build()
       val response = new MessagingResponse.Builder()
         .message(message)
-        .build();
+        .build()
       Ok(response.toXml()).as("application/xml")
     }
   }
 
-  def performAction(action: SubscriberAction) = {
-    action match {
-      case AlertAction(addr) =>
-        val alert = Alert(addr)
-        repo.listActive().map { subscribers =>
-          alert.sendAlert(subscribers, messagesApi)
-        }
-    }
+  def performAction(action: AlertAction) = action match {
+    case AlertAction(addr) =>
+      val alert = Alert(addr)
+      repo.listActive().map { subscribers => alert.sendAlert(subscribers, messagesApi) }
   }
 }

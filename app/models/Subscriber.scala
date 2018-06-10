@@ -6,5 +6,4 @@ case class Subscriber(id: Long, phone: String, language: Option[String], state: 
 
 object Subscriber {
   implicit val subscriberFormat: OFormat[Subscriber] = Json.format[Subscriber]
-
 }
