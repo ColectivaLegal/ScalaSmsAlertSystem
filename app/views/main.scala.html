@@ -1,10 +1,4 @@
-@*
- * This template is called from the `index` template. This template
- * handles the rendering of the page header and body tags. It takes
- * two arguments, a `String` for the title of the page and an `Html`
- * object to insert into the body of the page.
- *@
-@(title: String)(content: Html)(implicit flash: Flash)
+@(title: String, authSupport: AuthenticatedActionSupport)(content: Html)(implicit flash: Flash, request: Request[AnyContent])
 
 <!DOCTYPE html>
 <html lang="en">
@@ -29,7 +23,7 @@
             <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/alert">Alert Form</a>
@@ -40,6 +34,14 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/debug">Debug Page</a>
                     </li>
+
+                    <!-- TODO: need to add some code to remove this if the user is not logged in -->
+                    <!-- the cache is not being injected here which is causing an NPE -->
+                    @if(authSupport.isAuthenticated(request)) {
+                        <li class="nav-item">
+                            <a class="nav-link" href="/logout">Logout</a>
+                        </li>
+                    }
                 </ul>
             </div>
         </nav>

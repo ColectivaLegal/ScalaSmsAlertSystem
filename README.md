@@ -1,4 +1,5 @@
 # Sms Alert System for Scala
+
 [![Build Status](https://travis-ci.org/ColectivaLegal/ScalaSmsAlertSystem.svg?branch=master)](https://travis-ci.org/ColectivaLegal/ScalaSmsAlertSystem)
 
 Below you will find basic setup instructions for developing the SysmAlertSystem. 
@@ -6,6 +7,7 @@ Below you will find basic setup instructions for developing the SysmAlertSystem.
 To begin with, please ensure you have the following installed on your local development system:
 * JDK 8
 * [SBT](http://www.scala-sbt.org/download.html)
+* [ngrok](https://ngrok.com/)
 
 JDK8 is currently required due to some incompatibilities between SBT's ivy implementation and JDK9 
 
@@ -48,10 +50,38 @@ For the most rapid development, we recommend using either setup 1 or 2. Setup 2 
 really easy to create a new clean DB environment and ensure that the DB environment cannot be influenced by any other DB
 clients you may have running locally.
 
+### Set up Auth0
+
+Auth0 is used as the authentication and authorization service integrated in the service to handle identity. You will
+need to create an Auth0 account and create an Auth0 Application to integrate with the Alert Service.
+1. Go to [Auth0](https://auth0.com/) and create an account
+1. In the left nav panel, click `Applications` and then the button in the top right `Create Application`
+1. Give the application any name you like and choose `Single Page Web Applications` as the application type
+1. Go to `Settings` of the new Application
+1. For `Allowed Web Origins` enter **http://localhost:9000**
+
+Next, let's set up `ngrok` to set up a proxy that will allow Auth0 to call the locally running service.
+```
+ngrok http 9000
+```
+This will output information including the forwarding address such as `http://d3529cd6.ngrok.io`. In the following
+steps, `NGROK_ADDRESS` will represent the domain and subdomain such as `d3529cd6.ngrok.io`.
+1. Go to the the `Settings` tab of Auth0
+1. For `Allowed Callback URLs` enter **http://NGROK_ADDRESS/callback**
+1. For `Allowed Logout URLs` enter **http://localhost:9000**
+1. For `Allowed Origins (CORS)` enter **http://*.NGROK_ADDRESS**
+1. Click `Save Changes`
+
 ### Service on Host, DB on Host
 
 Start the service using the following command. It will attempt to connect to your locally running SQL database on the
-standard port, 3306.
+standard port, 3306. From the `Settings` tab of the Auth0 application, you will need to get the:
+* Domain
+* Client ID
+* Client Secret
+From the `APIs` page that can be found in the left nav panel of the Auth0 website, you will need the:
+* API Audience
+The callback URL is the URL configured in the previous section i.e. **http://NGROK_ADDRESS/callback**.
 
 ```bash
 cd ScalaSmsAlertSystem
@@ -67,6 +97,11 @@ sbt clean compile stage
 	-Dplay.http.secret.key=l33t_52uc3 \
 	-Dslick.dbs.default.db.user=$MYSQL_USER \
 	-Dslick.dbs.default.db.password=$MYSQL_PASSWORD
+  -Dauth0.domain=$AUTH0_DOMAIN \
+  -Dauth0.clientId=$AUTH0_CLIENT_ID \
+  -Dauth0.clientSecret=$AUTH0_CLIENT_SECRET \
+  -Dauth0.callbackURL=$AUTH0_CALLBACK_URL \
+  -Dauth0.audience=$AUTH0_API_AUDIENCE
 ```
 
 If the database is listening on a non-standard port, then specify the `slick.dbs.default.db.url` property, which will

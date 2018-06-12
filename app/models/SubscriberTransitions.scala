@@ -1,8 +1,6 @@
 package models
 
-import models.SubscriberTransitions.{Complete, SelectingLanguage, Unsubscribed}
-
-case class AlertAction(addr: String)
+import models.SubscriberTransitions.{AlertAction, Complete, SelectingLanguage, Unsubscribed}
 
 class SubscriberTransitions(subscriber: Subscriber) {
 
@@ -75,6 +73,8 @@ object SubscriberTransitions {
   case object Unsubscribed extends SubscriptionState { val stateName = "unsubscribed"}
   case object SelectingLanguage extends SubscriptionState { val stateName="selecting_language"}
   case object Complete extends SubscriptionState { val stateName="complete"}
+
+  case class AlertAction(addr: String)
 
   val SubscriptionStates: Array[SubscriptionState] = Array(Unsubscribed, SelectingLanguage, Complete)
 

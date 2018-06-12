@@ -2,7 +2,8 @@ package controllers
 
 import com.twilio.twiml.{Body, Message, MessagingResponse}
 import javax.inject.{Inject, Singleton}
-import models.{Alert, AlertAction, SubscriberRepository, SubscriberTransitions}
+import models.{Alert, SubscriberRepository, SubscriberTransitions}
+import models.SubscriberTransitions.AlertAction
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.i18n.{Lang, MessagesApi}

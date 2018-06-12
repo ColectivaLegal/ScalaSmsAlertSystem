@@ -1,11 +1,18 @@
-@()(implicit flash: Flash)
+@(authSupport: AuthenticatedActionSupport)()(implicit flash: Flash, request: Request[AnyContent])
 
-@*
- * Call the `main` template with two arguments. The first
- * argument is a `String` with the title of the page, the second
- * argument is an `Html` object containing the body of the page.
- *@
-@main("SMS Alerting System V2") {
+@main("SMS Alerting System V2", authSupport) {
     <h1>Welcome to the new world!</h1>
     There's not a lot here right now but we hope to flesh out functionality as time progresses.
+
+    <div class="login-box auth0-box before">
+        <img src="https://i.cloudup.com/StzWWrY34s.png" />
+        <h3>Auth0 Example</h3>
+        <p>Zero friction identity infrastructure, built for developers</p>
+        @if(authSupport.isAuthenticated(request)) {
+            <p>You are currently signed in with Auth0!</p>
+        } else {
+          <a class="btn btn-primary btn-lg btn-block" href="/login">SignIn</a>
+        }
+
+    </div>
 }

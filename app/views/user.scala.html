@@ -1,0 +1,9 @@
+@import play.api.libs.json.JsValue
+
+@(profile: JsValue, authSupport: AuthenticatedActionSupport)()(implicit messages: Messages, flash: Flash, request: Request[AnyContent])
+
+@main("Auth0 Play2 Scala Sample", authSupport) {
+    <img class="avatar" src='@((profile \ "picture").as[String])'/>
+    <h2>Welcome @((profile \ "name").as[String])</h2>
+    <a href="/logout" class="btn btn-lg">Logout</a>
+}

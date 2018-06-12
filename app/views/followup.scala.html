@@ -1,11 +1,6 @@
-@(followupForm: Form[FollowUp])()(implicit messages: Messages, flash: Flash, request: RequestHeader)
+@(followupForm: Form[FollowUp], authSupport: AuthenticatedActionSupport)()(implicit messages: Messages, flash: Flash, request: Request[AnyContent])
 
-@*
- * Call the `main` template with two arguments. The first
- * argument is a `String` with the title of the page, the second
- * argument is an `Html` object containing the body of the page.
- *@
-@main("SMS Alerting System V2") {
+@main("SMS Alerting System V2", authSupport) {
     <h1>Follow Up Form</h1>
 
     @helper.form(action = routes.FollowupController.post()) {

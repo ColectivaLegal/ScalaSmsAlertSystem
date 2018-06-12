@@ -12,27 +12,21 @@ import play.api.mvc.{AbstractController, ControllerComponents}
 
 import scala.concurrent.{ExecutionContext, Future}
 
+import FollowupController._
+
 @Singleton
 class FollowupController @Inject()(cc: ControllerComponents, repo: SubscriberRepository, messagesApi: MessagesApi)
                                   (implicit ec: ExecutionContext)
-  extends AbstractController(cc) with play.api.i18n.I18nSupport {
+  extends AbstractController(cc) with play.api.i18n.I18nSupport with AuthenticatedActionSupport {
 
-  val followUpForm = Form(
-    mapping(
-      "numberPeople" -> number,
-      "city" -> nonEmptyText,
-      "targetName" -> nonEmptyText,
-      "targetPhoneNumber" -> nonEmptyText
-    )(models.FollowUp.apply)(models.FollowUp.unapply)
-  )
-  def get = Action { implicit request =>
-    Ok(views.html.followup(followUpForm))
+  def get = authenticatedAction { implicit request =>
+    Ok(views.html.followup(FollowUpForm, this))
   }
 
-  def post = Action.async { implicit request =>
-    followUpForm.bindFromRequest.fold(
+  def post = authenticatedActionAsync { implicit request =>
+    FollowUpForm.bindFromRequest.fold(
       formWithErrors => {
-        Future.successful(BadRequest(views.html.followup(formWithErrors)))
+        Future.successful(BadRequest(views.html.followup(formWithErrors, this)))
       },
       followup => {
         repo.listActive().map { subscribers =>
@@ -51,4 +45,16 @@ class FollowupController @Inject()(cc: ControllerComponents, repo: SubscriberRep
       }
     )
   }
+}
+
+private object FollowupController {
+
+  private val FollowUpForm = Form(
+    mapping(
+      "numberPeople" -> number,
+      "city" -> nonEmptyText,
+      "targetName" -> nonEmptyText,
+      "targetPhoneNumber" -> nonEmptyText
+    )(models.FollowUp.apply)(models.FollowUp.unapply)
+  )
 }
