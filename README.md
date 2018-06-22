@@ -13,25 +13,32 @@ JDK8 is currently required due to some incompatibilities between SBT's ivy imple
 
 ## Twilio Setup
 
-You'll need a Twilio account to send and receive messages. You can
-sign up for a trial account for free.
+You'll need a Twilio account to send and receive messages. You can sign up for a trial account for free.
 
-After signing up, click on "Get Started" and follow the screens to
-create a phone number. This is the number that will be used for
-subscribing to the alert system.
+After signing up, click on "Get Started" and follow the screens to create a phone number. This is the number that will
+be used for subscribing to the alert system.
 
-You'll need to configure Twilio to communicate with the webhook
-endpoint in this Scala application. Go to "Manage Numbers" and click
-the number you created. On the configuration screen, scroll to the
-"Messaging" section and find the label "A Message Comes In". Make sure
-"Webhook" is selected and enter the web-accessible URL of your
-application with the following path:
+You'll need to configure Twilio to communicate with the webhook endpoint in this Scala application. Go to "Manage
+Numbers" and click the number you created. On the configuration screen, scroll to the "Messaging" section and find the
+label "A Message Comes In". Make sure "Webhook" is selected and enter the web-accessible URL of your application with
+the following path:
 
 http://your.domain/twilio/message
 
-If you are running on a local development instance behind a
-NAT/firewall, you can use [ngrok](https://ngrok.com/) to create a
-tunnel from a web-accessible address to your machine.
+If you are running on a local development instance behind a NAT/firewall, you can use [ngrok](https://ngrok.com/) to
+create a tunnel from a web-accessible address to your machine.
+
+## AWS Set Up
+
+The service uses [AWS SNS][] to send out text messages. This is because unless you purchase a Twilio short code, the
+text messages can be throttled to 1 message / second, which does not cut it for an incident where time is of the
+essense.
+
+The AWS credentials are discovered using the [DefaultAWSCredentialsProviderChain][]. Please click the link to read the
+documentation on how you would configure the credentials for your particular use case.
+
+[AWS SNS]: https://aws.amazon.com/sns/
+[DefaultAWSCredentialsProviderChain]: https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/auth/DefaultAWSCredentialsProviderChain.html
 
 ## Getting Started: Running Locally
 
@@ -85,12 +92,6 @@ The callback URL is the URL configured in the previous section i.e. **http://NGR
 
 ```bash
 cd ScalaSmsAlertSystem
-# username = your Account SID
-export TWILIO_USERNAME="..."
-# password = auth token
-export TWILIO_PASSWORD="..."
-# the phone number you created
-export TWILIO_PHONE="..."
 sbt clean compile stage
 ./target/universal/stage/bin/smsalertsystemv2 \
   -Dplay.evolutions.db.default.autoApply=true \
@@ -101,7 +102,10 @@ sbt clean compile stage
   -Dauth0.clientId=$AUTH0_CLIENT_ID \
   -Dauth0.clientSecret=$AUTH0_CLIENT_SECRET \
   -Dauth0.callbackURL=$AUTH0_CALLBACK_URL \
-  -Dauth0.audience=$AUTH0_API_AUDIENCE
+  -Dauth0.audience=$AUTH0_API_AUDIENCE \
+  -Dtwilio.username=$TWILIO_USERNAME \
+  -Dtwilio.password=$TWILIO_PASSWORD \
+  -Dtwilio.phone=$TWILIO_PHONE
 ```
 
 If the database is listening on a non-standard port, then specify the `slick.dbs.default.db.url` property, which will

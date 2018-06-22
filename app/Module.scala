@@ -1,7 +1,7 @@
-import com.google.inject.AbstractModule
-import java.time.Clock
-
-import com.twilio.Twilio
+import ServerLifecycleImpl.ServerLifecycle
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain
+import com.amazonaws.services.sns.{AmazonSNS, AmazonSNSClientBuilder}
+import com.google.inject.{AbstractModule, Provides}
 
 /**
  * This class is a Guice module that tells Guice how to bind several
@@ -14,19 +14,13 @@ import com.twilio.Twilio
  * configuration file.
  */
 class Module extends AbstractModule {
-
   override def configure() = {
-    //Ensure required properties are set
-    if (sys.env("TWILIO_USERNAME") == null) {
-      throw new IllegalArgumentException("TWILIO_USERNAME is required")
-    }
-    if (sys.env("TWILIO_PASSWORD") == null) {
-      throw new IllegalArgumentException("TWILIO_PASSWORD is required")
-    }
-    if (sys.env("TWILIO_PHONE") == null) {
-      throw new IllegalArgumentException("TWILIO_PHONE is required")
-    }
-    Twilio.init(sys.env("TWILIO_USERNAME"), sys.env("TWILIO_PASSWORD"));
+    bind(classOf[ServerLifecycle]).to(classOf[ServerLifecycleImpl]).asEagerSingleton()
   }
 
+  @Provides
+  def amazonSnsClient(): AmazonSNS = {
+    AmazonSNSClientBuilder.standard().withCredentials(new DefaultAWSCredentialsProviderChain()).build()
+  }
 }
+

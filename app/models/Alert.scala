@@ -1,28 +1,29 @@
 package models
 
-import com.twilio.rest.api.v2010.account.Message
-import com.twilio.`type`.PhoneNumber
+import com.amazonaws.services.sns.AmazonSNS
+import com.amazonaws.services.sns.model.{PublishRequest, PublishResult}
+import javax.inject.Inject
+import play.api.Logger
 import play.api.i18n.{Lang, MessagesApi}
 
-import scala.concurrent.ExecutionContext
+import models.Subscriber.SubscriberLangMap
 
 case class Alert(address: String) {
-  val subscriberLangMap = Map(
-    "eng" -> "en",
-    "spa" -> "es",
-    "kor" -> "ko",
-    "vie" -> "vi",
-    "cmn" -> "zh"
-  )
 
-  def sendAlert(subscribers: Seq[Subscriber], messagesApi: MessagesApi) = {
-    subscribers.map { subscriber =>
-      implicit val lang: Lang = Lang.get(subscriberLangMap.get(subscriber.language.get).get).get
-      Message
-        .creator(new PhoneNumber(subscriber.phone), // to
-          new PhoneNumber(sys.env("TWILIO_PHONE")), // from
-          messagesApi("action_alert", address))
-        .create()
+  @Inject() var amazonSns: AmazonSNS = _
+
+  def sendAlert(subscribers: Seq[Subscriber], messagesApi: MessagesApi): Unit = {
+    subscribers.foreach { subscriber =>
+      implicit val lang: Lang = Lang.get(SubscriberLangMap(subscriber.language.get)).get
+      val smsBody: String = messagesApi("action_alert", address)
+
+      val result: PublishResult = amazonSns.publish(
+        new PublishRequest()
+          .withPhoneNumber(subscriber.phone)
+          .withMessage(smsBody)
+      )
+
+      Logger.info(s"Sent text message to ${subscriber.phone} with message id ${result.getMessageId}")
     }
   }
 }

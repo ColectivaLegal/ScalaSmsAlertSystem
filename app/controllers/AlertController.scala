@@ -28,9 +28,8 @@ class AlertController @Inject()(cc: ControllerComponents, repo: SubscriberReposi
       },
       alert => {
         repo.listActive().map { subscribers =>
-          val messages = alert.sendAlert(subscribers, messagesApi)
-          Redirect(routes.HomeController.index())
-            .flashing("success" -> ("Done! Messages sent with IDs " + messages.map(_.getSid()).mkString(",")))
+          alert.sendAlert(subscribers, messagesApi)
+          Redirect(routes.HomeController.index()).flashing("success" -> "Done! Messages sent")
         }
       }
     )

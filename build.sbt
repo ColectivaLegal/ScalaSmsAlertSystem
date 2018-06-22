@@ -14,6 +14,7 @@ libraryDependencies ++= Seq(
   ws,
   guice,
   "com.twilio.sdk" % "twilio" % "7.15.0",
+  "com.amazonaws" % "aws-java-sdk-sns" % "1.11.351",
   "com.typesafe.play" %% "play-slick" %  "3.0.2",
   "com.typesafe.play" %% "play-slick-evolutions" % "3.0.2",
   "com.h2database" % "h2" % "1.4.194",
