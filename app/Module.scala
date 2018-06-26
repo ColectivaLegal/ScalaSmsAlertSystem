@@ -2,6 +2,7 @@ import ServerLifecycleImpl.ServerLifecycle
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain
 import com.amazonaws.services.sns.{AmazonSNS, AmazonSNSClientBuilder}
 import com.google.inject.{AbstractModule, Provides}
+import play.api.Configuration
 
 /**
  * This class is a Guice module that tells Guice how to bind several
@@ -13,14 +14,21 @@ import com.google.inject.{AbstractModule, Provides}
  * adding `play.modules.enabled` settings to the `application.conf`
  * configuration file.
  */
-class Module extends AbstractModule {
+class Module(config: Configuration) extends AbstractModule {
   override def configure() = {
     bind(classOf[ServerLifecycle]).to(classOf[ServerLifecycleImpl]).asEagerSingleton()
   }
 
   @Provides
-  def amazonSnsClient(): AmazonSNS = {
-    AmazonSNSClientBuilder.standard().withCredentials(new DefaultAWSCredentialsProviderChain()).build()
+  def amazonSnsClient: AmazonSNS = {
+    AmazonSNSClientBuilder
+      .standard()
+      .withCredentials(new DefaultAWSCredentialsProviderChain())
+      .withRegion(config.underlying.getString(Module.AwsRegionConfigKey))
+      .build()
   }
 }
 
+private object Module {
+  val AwsRegionConfigKey: String = "aws.region"
+}

@@ -97,7 +97,8 @@ sbt clean compile stage
   -Dplay.evolutions.db.default.autoApply=true \
 	-Dplay.http.secret.key=l33t_52uc3 \
 	-Dslick.dbs.default.db.user=$MYSQL_USER \
-	-Dslick.dbs.default.db.password=$MYSQL_PASSWORD
+	-Dslick.dbs.default.db.password=$MYSQL_PASSWORD \
+	-Daws.region=$AWS_REGION \
   -Dauth0.domain=$AUTH0_DOMAIN \
   -Dauth0.clientId=$AUTH0_CLIENT_ID \
   -Dauth0.clientSecret=$AUTH0_CLIENT_SECRET \
@@ -166,9 +167,11 @@ just a default value.
 
 We will use Docker Compose to run the service and DB in a Docker container. Please see the 
 [Docker Compose Installation page][] for installation instructions. Docker compose will run the instructions specified
-in the `docker-compose.yml` file. Running and tearing down is very easy:
+in the `docker-compose.yml` file. It uses the `.env` file to fill out the variables in the YAML file.  Copy the
+`template.env` file to `.env` and update the variables. Afterwards, running and tearing down the service is very easy:
 
 ```bash
+docker-compose build
 docker-compose up -d
 docker-compose down
 ```

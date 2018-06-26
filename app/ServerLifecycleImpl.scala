@@ -7,7 +7,7 @@ import scala.concurrent.Future
 import ServerLifecycleImpl._
 
 @Singleton
-class ServerLifecycleImpl @Inject()(config: Configuration, appLifecycle: ApplicationLifecycle) extends ServerLifecycle {
+class ServerLifecycleImpl(config: Configuration, appLifecycle: ApplicationLifecycle) extends ServerLifecycle {
 
   def onStart(): Unit = {
     //Ensure required properties are set

@@ -5,16 +5,23 @@ services:
       context: .
     command: [
       "./target/universal/stage/bin/smsalertsystemv2",
-      "-Dplay.evolutions.db.default.autoApply=true",
-      "-Dplay.http.secret.key=l33t_52uc3",
-      "-Dslick.dbs.default.db.url=jdbc:mysql://mysql:3306/sms"
+        "-Dplay.evolutions.db.default.autoApply=true",
+        "-Dplay.http.secret.key=${PLAY_SECRET}",
+        "-Dslick.dbs.default.db.url=jdbc:mysql://mysql:3306/${MYSQL_DB}",
+        "-Dslick.dbs.default.db.user=root",
+        "-Dslick.dbs.default.db.password=${MYSQL_ROOT_PASSWORD}",
+        "-Daws.region=${AWS_REGION}",
+        "-Dauth0.domain=${AUTH0_DOMAIN}",
+        "-Dauth0.clientId=${AUTH0_CLIENT_ID}",
+        "-Dauth0.clientSecret=${AUTH0_CLIENT_SECRET}",
+        "-Dauth0.callbackURL=${AUTH0_CALLBACK_URL}",
+        "-Dauth0.audience=${AUTH0_AUDIENCE}",
+        "-Dtwilio.username=${TWILIO_USERNAME}",
+        "-Dtwilio.password=${TWILIO_PASSWORD}",
+        "-Dtwilio.phone=${TWILIO_PHONE}"
     ]
     depends_on:
       - db
-    environment:
-      TWILIO_USERNAME: username
-      TWILIO_PASSWORD: password
-      TWILIO_PHONE: '+10000000000'
     links:
       - db:mysql
     networks:
@@ -25,8 +32,8 @@ services:
     image: mariadb
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: example
-      MYSQL_DATABASE: sms
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DB}"
     networks:
       service_network:
         aliases:
