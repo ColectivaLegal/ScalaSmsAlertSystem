@@ -83,11 +83,15 @@ steps, `NGROK_ADDRESS` will represent the domain and subdomain such as `d3529cd6
 
 Start the service using the following command. It will attempt to connect to your locally running SQL database on the
 standard port, 3306. From the `Settings` tab of the Auth0 application, you will need to get the:
+
 * Domain
 * Client ID
 * Client Secret
+
 From the `APIs` page that can be found in the left nav panel of the Auth0 website, you will need the:
+
 * API Audience
+
 The callback URL is the URL configured in the previous section i.e. **http://NGROK_ADDRESS/callback**.
 
 ```bash
@@ -95,10 +99,10 @@ cd ScalaSmsAlertSystem
 sbt clean compile stage
 ./target/universal/stage/bin/smsalertsystemv2 \
   -Dplay.evolutions.db.default.autoApply=true \
-	-Dplay.http.secret.key=l33t_52uc3 \
-	-Dslick.dbs.default.db.user=$MYSQL_USER \
-	-Dslick.dbs.default.db.password=$MYSQL_PASSWORD \
-	-Daws.region=$AWS_REGION \
+  -Dplay.http.secret.key=l33t_52uc3 \
+  -Dslick.dbs.default.db.user=$MYSQL_USER \
+  -Dslick.dbs.default.db.password=$MYSQL_PASSWORD \
+  -Daws.region=$AWS_REGION \
   -Dauth0.domain=$AUTH0_DOMAIN \
   -Dauth0.clientId=$AUTH0_CLIENT_ID \
   -Dauth0.clientSecret=$AUTH0_CLIENT_SECRET \
@@ -171,6 +175,8 @@ in the `docker-compose.yml` file. It uses the `.env` file to fill out the variab
 `template.env` file to `.env` and update the variables. Afterwards, running and tearing down the service is very easy:
 
 ```bash
+# build the docker image that will be used with docker-compose; this is not the same one as from
+# running "docker build ."
 docker-compose build
 docker-compose up -d
 docker-compose down
