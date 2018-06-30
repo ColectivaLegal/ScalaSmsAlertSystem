@@ -14,13 +14,13 @@ import play.api.Configuration
  * adding `play.modules.enabled` settings to the `application.conf`
  * configuration file.
  */
-class Module(config: Configuration) extends AbstractModule {
+class Module extends AbstractModule {
   override def configure() = {
     bind(classOf[ServerLifecycle]).to(classOf[ServerLifecycleImpl]).asEagerSingleton()
   }
 
   @Provides
-  def amazonSnsClient: AmazonSNS = {
+  def amazonSnsClient(config: Configuration): AmazonSNS = {
     AmazonSNSClientBuilder
       .standard()
       .withCredentials(new DefaultAWSCredentialsProviderChain())
